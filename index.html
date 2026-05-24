@@ -10,422 +10,235 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --pink: #e91e8c;
-      --pink-light: #ff6eb4;
-      --bg: #080808;
-      --surface: rgba(255,255,255,0.03);
-      --border: rgba(255,255,255,0.08);
-      --text: #f0f0f0;
-      --muted: #888;
-    }
-
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: #fff;
+      color: #111;
       font-family: 'Inter', -apple-system, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
     @keyframes fade-in {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes glow-pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes pulse-ring {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(233,30,140,0.4); }
-      70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(233,30,140,0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(233,30,140,0); }
+      0%   { box-shadow: 0 0 0 0 rgba(233,30,140,0.4); }
+      70%  { box-shadow: 0 0 0 18px rgba(233,30,140,0); }
+      100% { box-shadow: 0 0 0 0 rgba(233,30,140,0); }
     }
 
-    /* ── PRESS & HOLD SCREEN ── */
-    #press-hold-screen {
+    /* ── SHARED LAYOUT ── */
+    .page {
       display: none;
-      min-height: 100vh;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px 24px;
-      text-align: center;
-      animation: fade-in 0.5s ease both;
+      min-height: 100vh;
+      animation: fade-in 0.4s ease both;
     }
 
-    .ph-avatar-wrap {
+    .banner {
+      width: 100%;
+      height: 160px;
+      background: #e91e8c;
+      flex-shrink: 0;
       position: relative;
-      display: inline-block;
-      margin-bottom: 24px;
-    }
-
-    .ph-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid transparent;
-      background: linear-gradient(#080808, #080808) padding-box,
-                  linear-gradient(135deg, var(--pink), var(--pink-light)) border-box;
-    }
-
-    .ph-name {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-    }
-
-    .ph-sub {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 48px;
-    }
-
-    .ph-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--pink), var(--pink-light));
-      color: #fff;
-      font-size: 17px;
-      font-weight: 700;
-      padding: 20px 48px;
-      border-radius: 50px;
-      text-decoration: none;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-touch-callout: default;
-      animation: pulse-ring 2s infinite;
-      cursor: pointer;
-    }
-
-    .ph-hint {
-      margin-top: 24px;
-      color: #444;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .ph-hint strong {
-      color: #666;
-    }
-
-    /* ── MAIN LANDING PAGE ── */
-    #main-page {
-      display: none;
-      animation: fade-in 0.6s ease both;
-    }
-
-    header {
-      padding: 24px 5%;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .profile-section {
-      padding: 60px 5% 40px;
-      text-align: center;
-      max-width: 520px;
-      margin: 0 auto;
-      animation: fade-in 0.6s ease 0.1s both;
     }
 
     .avatar-wrap {
       position: relative;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-
-    .avatar-img {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid transparent;
-      background: linear-gradient(#080808, #080808) padding-box,
-                  linear-gradient(135deg, var(--pink), var(--pink-light)) border-box;
-    }
-
-    .avatar-dot {
-      position: absolute;
-      bottom: 8px; right: 8px;
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: #22c55e;
-      border: 2px solid #080808;
-      animation: glow-pulse 2s infinite;
-    }
-
-    .profile-name {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-    }
-
-    .profile-bio {
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 6px;
-    }
-
-    .profile-location {
-      color: #555;
-      font-size: 13px;
-      margin-bottom: 32px;
-    }
-
-    .links-section {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 0 5% 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      animation: fade-in 0.6s ease 0.2s both;
-    }
-
-    .link-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 16px 24px;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: transform 0.15s, opacity 0.15s;
-      text-decoration: none;
-      width: 100%;
-    }
-    .link-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-    .link-btn:active { transform: translateY(0); }
-
-    .link-btn-primary {
-      background: linear-gradient(135deg, var(--pink), var(--pink-light));
-      color: #fff;
-    }
-
-    .link-btn-secondary {
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .link-btn .icon { width: 20px; height: 20px; flex-shrink: 0; }
-
-    footer {
-      text-align: center;
-      padding: 32px 5%;
-      border-top: 1px solid var(--border);
-      color: #333;
-      font-size: 12px;
-    }
-
-    /* ── AGE GATE (JS-injected) ── */
-    #age-gate {
-      position: fixed;
-      inset: 0;
-      background: rgba(8,8,8,0.97);
-      backdrop-filter: blur(12px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      animation: fade-in 0.3s ease both;
-    }
-
-    .gate-card {
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 48px 36px;
-    }
-
-    .gate-logo {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 32px;
-    }
-
-    .gate-card h2 {
-      font-size: clamp(20px, 4vw, 26px);
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      margin-top: -100px;
       margin-bottom: 12px;
     }
 
-    .gate-card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 32px;
+    .avatar {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      display: block;
     }
 
-    .gate-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #111;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-    .btn-confirm {
-      background: linear-gradient(135deg, var(--pink), var(--pink-light));
+    .verified {
+      width: 20px;
+      height: 20px;
+      background: #e91e8c;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .verified svg { width: 12px; height: 12px; }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 28px;
+    }
+
+    .main-btn {
+      width: calc(100% - 48px);
+      max-width: 360px;
+      padding: 18px;
+      border-radius: 50px;
+      background: #e91e8c;
       color: #fff;
-      border: none;
-      padding: 15px 32px;
-      border-radius: 50px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
+      border: none;
       cursor: pointer;
-      transition: opacity 0.2s;
-      width: 100%;
-    }
-    .btn-confirm:hover { opacity: 0.85; }
-
-    .btn-deny {
-      background: transparent;
-      color: #444;
-      border: 1px solid rgba(255,255,255,0.06);
-      padding: 14px 32px;
-      border-radius: 50px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
+      text-align: center;
       text-decoration: none;
       display: block;
-      width: 100%;
+      transition: opacity 0.2s;
+      -webkit-touch-callout: default;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .main-btn:hover { opacity: 0.88; }
+
+    /* ── PRESS & HOLD EXTRAS ── */
+    #press-hold-screen .main-btn {
+      animation: pulse-ring 2s infinite;
     }
 
-    .gate-fine-print { margin-top: 24px; color: #333; font-size: 11px; line-height: 1.6; }
+    /* ── SAFARI PAGE EXTRAS ── */
+    .social-links {
+      width: calc(100% - 48px);
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .social-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 50px;
+      background: #f5f5f5;
+      color: #111;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .social-btn:hover { background: #ebebeb; }
+    .social-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .notice {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #bbb;
+      text-align: center;
+      padding: 0 24px 40px;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
 
   <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       PRESS & HOLD SCREEN (shown in IG IAB)
+       PRESS & HOLD — shown inside Instagram IAB
+       Crawler never sees this (JS-rendered)
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-  <div id="press-hold-screen">
-    <div class="ph-avatar-wrap">
-      <img class="ph-avatar" src="./avatar.jpg" alt="Nina Nashi" />
+  <div id="press-hold-screen" class="page" style="align-items:center; text-align:center;">
+    <div class="banner"></div>
+    <div class="avatar-wrap">
+      <img class="avatar" src="./avatar.jpg" alt="Nina Nashi" />
     </div>
-    <div class="ph-name">Nina Nashi</div>
-    <div class="ph-sub">Model · Content Creator</div>
-    <a id="ph-btn" class="ph-btn">Press &amp; Hold Here</a>
-    <p class="ph-hint">
-      <strong>Press and hold</strong> the button above,<br />
-      then tap <strong>"Open in Safari"</strong>
-    </p>
+    <div class="name">
+      Nina Nashi
+      <span class="verified">
+        <svg viewBox="0 0 24 24" fill="white"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.707 7.293a1 1 0 00-1.414 0L10 14.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l6-6a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>
+      </span>
+    </div>
+    <div class="subtitle">Model &amp; Content Creator</div>
+    <a id="ph-btn" class="main-btn">Press &amp; Hold Here</a>
   </div>
 
   <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       MAIN LANDING PAGE (shown in real browser)
-       Crawler only ever sees this HTML.
+       LANDING PAGE — shown in Safari / real browser
+       This is all the crawler ever reads.
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-  <div id="main-page">
-
-    <header>
-      <span style="font-weight: 800; font-size: 18px; letter-spacing: -0.5px;">Nina Nashi</span>
-    </header>
-
-    <div class="profile-section">
-      <div class="avatar-wrap">
-        <img class="avatar-img" src="./avatar.jpg" alt="Nina Nashi" />
-        <div class="avatar-dot"></div>
-      </div>
-      <div class="profile-name">Nina Nashi</div>
-      <div class="profile-bio">Model · Content Creator · Lifestyle</div>
-      <div class="profile-location">📍 London</div>
+  <div id="main-page" class="page" style="align-items:center; text-align:center;">
+    <div class="banner"></div>
+    <div class="avatar-wrap">
+      <img class="avatar" src="./avatar.jpg" alt="Nina Nashi" />
     </div>
+    <div class="name">
+      Nina Nashi
+      <span class="verified">
+        <svg viewBox="0 0 24 24" fill="white"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.707 7.293a1 1 0 00-1.414 0L10 14.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l6-6a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>
+      </span>
+    </div>
+    <div class="subtitle">Model &amp; Content Creator</div>
 
-    <div class="links-section">
+    <button class="main-btn" onclick="goToContent()">Exclusive Content</button>
 
-      <button class="link-btn link-btn-primary" onclick="goToContent()">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-          <polyline points="13 2 13 9 20 9"/>
-        </svg>
-        Exclusive Content
-      </button>
-
-      <a class="link-btn link-btn-secondary" href="https://www.instagram.com/ninanashi777/" target="_blank" rel="noopener">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <div class="social-links">
+      <a class="social-btn" href="https://www.instagram.com/ninanashi777/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
           <circle cx="12" cy="12" r="4"/>
           <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
         </svg>
         Instagram
       </a>
-
-      <a class="link-btn link-btn-secondary" href="https://www.youtube.com/@Mochi.ASMR1" target="_blank" rel="noopener">
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+      <a class="social-btn" href="https://www.youtube.com/@Mochi.ASMR1" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
         </svg>
         YouTube
       </a>
-
     </div>
 
-    <footer>© 2026 Nina Nashi. All rights reserved.</footer>
-
+    <p class="notice">
+      Content intended for adults 18+.<br />For entertainment purposes only.
+    </p>
   </div>
 
   <script>
-    // ── Detect Instagram / Facebook IAB ──
     function isInAppBrowser() {
       var ua = navigator.userAgent || '';
       return /Instagram|FBAN|FBAV|FB_IAB|FB4A|FBIOS|Twitter|Line\/|KAKAOTALK|MicroMessenger/i.test(ua);
     }
 
     if (isInAppBrowser()) {
-      // In IAB — show press & hold screen
-      document.getElementById('press-hold-screen').style.display = 'flex';
-
-      // Set the button href to current page so long-press → "Open in Safari"
+      var screen = document.getElementById('press-hold-screen');
+      screen.style.display = 'flex';
       var btn = document.getElementById('ph-btn');
       btn.href = window.location.href;
       btn.target = '_blank';
       btn.rel = 'noopener noreferrer';
       btn.addEventListener('click', function(e) { e.preventDefault(); });
-
     } else {
-      // Real browser — show landing page
-      document.getElementById('main-page').style.display = 'block';
-
-      // Age gate — injected by JS, invisible to crawler
-      if (sessionStorage.getItem('ageVerified') !== '1') {
-        var gate = document.createElement('div');
-        gate.id = 'age-gate';
-        gate.innerHTML = [
-          '<div class="gate-card">',
-            '<div class="gate-logo">Nina Nashi</div>',
-            '<h2>Confirm your age</h2>',
-            '<p>You must be 18 or older to enter this page.</p>',
-            '<div class="gate-buttons">',
-              '<button class="btn-confirm" onclick="confirmAge()">I\'m 18 or older — Enter</button>',
-              '<a class="btn-deny" href="https://www.google.com">I\'m under 18 — Leave</a>',
-            '</div>',
-            '<p class="gate-fine-print">For entertainment purposes only.</p>',
-          '</div>',
-        ].join('');
-        document.body.appendChild(gate);
-      }
+      document.getElementById('main-page').style.display = 'flex';
     }
 
-    function confirmAge() {
-      sessionStorage.setItem('ageVerified', '1');
-      var gate = document.getElementById('age-gate');
-      if (gate) gate.remove();
-    }
-
-    // OF link — decoded at runtime only, never in HTML
+    // OF link — decoded at runtime, never in static HTML
     function goToContent() {
       var url = atob('aHR0cHM6Ly9vbmx5ZmFucy5jb20vbmluYW5hc2hpL2MyNQ==');
       var a = document.createElement('a');
